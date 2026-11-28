@@ -1,0 +1,26 @@
+name: Gradle Wrapper
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+      distribution-sha256-sum:
+        required: true
+
+jobs:
+  gradle-wrapper:
+    runs-on: ubuntu-26.04
+    steps:
+    - name: Generate wrapper
+      run: |
+        > settings.gradle.kts
+        gradle wrapper --gradle-version "${{ inputs.version }}" --gradle-distribution-sha256-sum "${{ inputs.distribution-sha256-sum }}"
+
+    - name: Upload
+      uses: actions/upload-artifact@v7
+      with:
+        name: gradle-wrapper
+        path: |
+          gradle/
+          gradlew
+          gradlew.bat
